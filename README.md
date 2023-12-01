@@ -19,6 +19,7 @@ Flags:
     --delay=2000 // delay in milliseconds before executing command on file change
     --extension='js' // only execute command on files with this extension. Default is all files
     --path='.' // path to watch for changes. Multiple paths are allowed. Default is current directory
+    --file='src/manifest.json' // target specific file to watch. Multiple files are allowed. Cannot be used with extension or path inputs
     --command='ls -l' // command to execute on file change  
     --recursive // watch subdirectories
     --silence // no output to stdout
