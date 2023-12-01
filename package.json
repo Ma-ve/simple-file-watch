@@ -1,5 +1,5 @@
 {
-  "name": "simple-file-watch",
+  "name": "@ma-ve/simple-file-watch",
   "bin": {
     "simple-file-watch": "./cli.js"
   },
@@ -9,7 +9,7 @@
     "file",
     "watch"
   ],
-  "author": "Dennis Iversen",
+  "author": "Mave",
   "license": "MIT",
   "contributors": [],
   "dependencies": {
@@ -21,6 +21,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/diversen/simple-file-watch.git"
+    "url": "git+https://github.com/Ma-ve/simple-file-watch.git"
   }
 }
