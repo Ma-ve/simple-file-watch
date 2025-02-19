@@ -134,16 +134,19 @@ watch(path, { delay: delay, recursive: recursive, persistent: true }, async func
                 fileHashes[filename] = '';
             }
 
-            const hash = crypto.createHash('md5')
-                .update(fs.readFileSync(filename, { encoding: 'utf8' }))
-                .digest('hex');
+            try {
+                const hash = crypto.createHash('md5')
+                    .update(fs.readFileSync(filename, { encoding: 'utf8' }))
+                    .digest('hex');
 
-            if (fileHashes[filename] === hash) {
-                consoleLog(`Hash not changed for file ${ filename }, not doing anything...`)
-                return;
+                if (fileHashes[filename] === hash) {
+                    consoleLog(`Hash not changed for file ${ filename }, not doing anything...`)
+                    return;
+                }
+
+                fileHashes[filename] = hash;
+            } catch (e) {
             }
-
-            fileHashes[filename] = hash;
         }
 
         consoleLog("File changed: " + filename);
