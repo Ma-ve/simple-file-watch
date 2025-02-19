@@ -1,7 +1,7 @@
 {
   "name": "@ma-ve/simple-file-watch",
   "bin": {
-    "simple-file-watch": "./cli.js"
+    "simple-file-watch": "cli.js"
   },
   "version": "3.0.0",
   "keywords": [

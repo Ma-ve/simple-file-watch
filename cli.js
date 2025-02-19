@@ -8,6 +8,8 @@ var m = require('minimist-mini')(opts);
 var fileExtension = require('file-extension');
 var exec = require('child_process').exec;
 var watch = require('node-watch');
+var fs = require('fs');
+var crypto = require('crypto');
 
 if (m.get('help') || m.get('h')) {
     m.helpMessage();
@@ -99,6 +101,8 @@ function execute(cmd) {
     });
 }
 
+var fileHashes = {};
+
 var command = m.get('command');
 var lastExecution = new Date().getTime();
 
@@ -124,6 +128,21 @@ watch(path, { delay: delay, recursive: recursive, persistent: true }, async func
         (isSpecificFile);
 
     if (shouldExecute) {
+        if (!(filename in fileHashes)) {
+            fileHashes[filename] = '';
+        }
+
+        const hash = crypto.createHash('md5')
+            .update(fs.readFileSync(filename, {encoding: 'utf8'}))
+            .digest('hex');
+
+        if (fileHashes[filename] === hash) {
+            consoleLog(`Hash not changed for file ${filename}, not doing anything...`)
+            return;
+        }
+
+        fileHashes[filename] = hash;
+
         consoleLog("File changed: " + filename);
         if (command) {
             consoleLog("Executing: " + command);
@@ -132,5 +151,4 @@ watch(path, { delay: delay, recursive: recursive, persistent: true }, async func
     }
 
     lastExecution = new Date().getTime();
-
 });
