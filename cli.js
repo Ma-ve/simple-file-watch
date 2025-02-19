@@ -19,6 +19,7 @@ if (m.get('help') || m.get('h')) {
 var path = m.get('path');
 var extension = m.get('extension');
 var file = m.get('file');
+var checkContents = !!m.get('check-contents');
 
 const uniqueInputSets = [
     {
@@ -128,20 +129,22 @@ watch(path, { delay: delay, recursive: recursive, persistent: true }, async func
         (isSpecificFile);
 
     if (shouldExecute) {
-        if (!(filename in fileHashes)) {
-            fileHashes[filename] = '';
+        if (checkContents) {
+            if (!(filename in fileHashes)) {
+                fileHashes[filename] = '';
+            }
+
+            const hash = crypto.createHash('md5')
+                .update(fs.readFileSync(filename, { encoding: 'utf8' }))
+                .digest('hex');
+
+            if (fileHashes[filename] === hash) {
+                consoleLog(`Hash not changed for file ${ filename }, not doing anything...`)
+                return;
+            }
+
+            fileHashes[filename] = hash;
         }
-
-        const hash = crypto.createHash('md5')
-            .update(fs.readFileSync(filename, {encoding: 'utf8'}))
-            .digest('hex');
-
-        if (fileHashes[filename] === hash) {
-            consoleLog(`Hash not changed for file ${filename}, not doing anything...`)
-            return;
-        }
-
-        fileHashes[filename] = hash;
 
         consoleLog("File changed: " + filename);
         if (command) {
